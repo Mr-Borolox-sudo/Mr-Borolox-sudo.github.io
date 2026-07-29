@@ -78,11 +78,7 @@ export default function Hero() {
         >
           <div className="w-72 h-72 xl:w-96 xl:h-96 rounded-full bg-gradient-to-tr from-primary-600 to-secondary-400 p-1 shadow-[0_0_40px_rgba(14,165,233,0.3)]">
             <div className="w-full h-full rounded-full bg-gray-900 border-4 border-black overflow-hidden relative flex items-center justify-center group cursor-pointer">
-              {/* Replace with your image later: <Image src="/profile.jpg" alt="Shihab Ahammed" fill className="object-cover" /> */}
-              <User size={80} className="text-gray-700 group-hover:scale-110 transition-transform duration-300" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity">
-                <span className="text-sm font-medium text-white px-4 text-center">Place your profile.jpg in public folder</span>
-              </div>
+              <Image src="/profile.jpg" alt="Shihab Ahammed" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
             </div>
           </div>
         </motion.div>
