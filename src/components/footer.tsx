@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Mail, Heart } from "lucide-react";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -23,13 +23,13 @@ export default function Footer() {
           <Link href="https://github.com/shihab-ahammed" target="_blank" className="text-gray-400 hover:text-white transition-colors" aria-label="GitHub">
             <FaGithub size={24} />
           </Link>
-          <Link href="#" target="_blank" className="text-gray-400 hover:text-[#0a66c2] transition-colors" aria-label="LinkedIn">
+          <Link href="https://www.linkedin.com/in/shihab-ahammed/" target="_blank" className="text-gray-400 hover:text-[#0a66c2] transition-colors" aria-label="LinkedIn">
             <FaLinkedin size={24} />
           </Link>
-          <Link href="#" target="_blank" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
-            <FaTwitter size={24} />
+          <Link href="https://www.instagram.com/_laz_yyyy__/" target="_blank" className="text-gray-400 hover:text-[#E1306C] transition-colors" aria-label="Instagram">
+            <FaInstagram size={24} />
           </Link>
-          <Link href="mailto:hello@example.com" className="text-gray-400 hover:text-primary-400 transition-colors" aria-label="Email">
+          <Link href="mailto:ahammedshihab15@gmail.com" className="text-gray-400 hover:text-primary-400 transition-colors" aria-label="Email">
             <Mail size={24} />
           </Link>
         </div>

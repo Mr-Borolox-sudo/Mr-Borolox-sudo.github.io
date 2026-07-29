@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, Mail } from "lucide-react";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -88,11 +88,11 @@ export default function Navbar() {
               <Link href="https://github.com/shihab-ahammed" target="_blank" className="text-gray-400 hover:text-white transition-colors">
                 <FaGithub size={20} />
               </Link>
-              <Link href="#" target="_blank" className="text-gray-400 hover:text-[#0a66c2] transition-colors">
+              <Link href="https://www.linkedin.com/in/shihab-ahammed/" target="_blank" className="text-gray-400 hover:text-[#0a66c2] transition-colors">
                 <FaLinkedin size={20} />
               </Link>
-              <Link href="#" target="_blank" className="text-gray-400 hover:text-white transition-colors">
-                <FaTwitter size={20} />
+              <Link href="https://www.instagram.com/_laz_yyyy__/" target="_blank" className="text-gray-400 hover:text-[#E1306C] transition-colors">
+                <FaInstagram size={20} />
               </Link>
             </div>
           </motion.div>
