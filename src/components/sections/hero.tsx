@@ -7,86 +7,96 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <section id="home" className="relative min-h-[100dvh] flex items-center pt-28 pb-20 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
 
-          {/* Picture — shown at top on mobile, right side on desktop */}
+          {/* Photo — top on mobile, right on desktop */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1], delay: 0.15 }}
             className="flex-shrink-0 order-first lg:order-last"
           >
-            <div className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full bg-gradient-to-tr from-primary-600 to-secondary-400 p-1 shadow-[0_0_40px_rgba(14,165,233,0.3)]">
-              <div className="w-full h-full rounded-full bg-gray-900 border-4 border-black overflow-hidden relative group cursor-pointer">
-                <Image
-                  src="/profile.jpg"
-                  alt="Shihab Ahammed"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  priority
-                />
+            {/* Double-bezel frame */}
+            <div className="p-1.5 rounded-full bg-gradient-to-tr from-primary-600/60 via-secondary-500/40 to-primary-400/60 shadow-[0_0_60px_rgba(14,165,233,0.2)]">
+              <div className="p-1 rounded-full bg-background">
+                <div className="w-44 h-44 sm:w-60 sm:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden relative group">
+                  <Image
+                    src="/profile.jpg"
+                    alt="Shihab Ahammed"
+                    fill
+                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-110"
+                    priority
+                  />
+                  {/* Inner vignette */}
+                  <div className="absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,0.4)]" />
+                </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Text content */}
+          {/* Text */}
           <div className="max-w-2xl text-center lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+            <motion.span
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 mb-6 text-sm font-mono"
+              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+              className="eyebrow mb-6 inline-flex"
             >
-              <Terminal size={14} />
-              <span>sys.boot("shihab_ahammed")</span>
-            </motion.div>
+              <Terminal size={11} />
+              sys.boot(&quot;shihab_ahammed&quot;)
+            </motion.span>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-6"
+              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: 0.1 }}
+              className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-5"
             >
-              Hi, I'm <span className="text-gradient">Shihab Ahammed</span>
+              Hi, I&apos;m{" "}
+              <span className="text-gradient">Shihab Ahammed</span>
             </motion.h1>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg md:text-2xl text-gray-300 font-medium mb-8 leading-relaxed"
-            >
-              Computer Science Student | Cybersecurity Enthusiast | Linux User | AI Explorer
-            </motion.h2>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-gray-400 text-base md:text-lg max-w-2xl mb-10 leading-relaxed"
+              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: 0.2 }}
+              className="text-base md:text-lg text-gray-400 font-mono-accent mb-4"
             >
-              I'm passionate about cybersecurity, Linux, AI, programming, and building secure systems. I'm currently studying Computer Science while continuously learning ethical hacking, C++, networking, and modern software development.
+              CS Student &nbsp;·&nbsp; Cybersecurity Enthusiast &nbsp;·&nbsp; Linux User &nbsp;·&nbsp; AI Explorer
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: 0.3 }}
+              className="text-gray-500 text-base leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0"
+            >
+              Passionate about cybersecurity, Linux, AI, and building secure systems. Currently studying Computer Science
+              while exploring ethical hacking, C++, networking, and modern software development.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex flex-wrap justify-center lg:justify-start items-center gap-4"
+              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1], delay: 0.4 }}
+              className="flex flex-wrap justify-center lg:justify-start items-center gap-3"
             >
+              {/* Primary CTA — Button-in-Button pattern */}
               <Link
                 href="#projects"
-                className="px-8 py-4 rounded-lg bg-primary-600 hover:bg-primary-500 text-white font-medium transition-all flex items-center gap-2 group shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]"
+                className="group flex items-center gap-2 pl-6 pr-2 py-2 rounded-full bg-primary-600 hover:bg-primary-500 text-white text-sm font-semibold transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_0_24px_rgba(14,165,233,0.25)] hover:shadow-[0_0_36px_rgba(14,165,233,0.4)] active:scale-[0.98]"
               >
                 View Projects
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-px">
+                  <ArrowRight size={14} />
+                </span>
               </Link>
 
               <Link
                 href="#contact"
-                className="px-8 py-4 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all flex items-center gap-2"
+                className="px-6 py-2.5 rounded-full border border-white/10 text-gray-300 hover:text-white hover:border-white/25 hover:bg-white/5 text-sm font-semibold transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98]"
               >
                 Contact Me
               </Link>
@@ -96,8 +106,9 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-2/3 bg-gradient-to-l from-primary-900/20 to-transparent blur-3xl rounded-full pointer-events-none"></div>
+      {/* Decorative orbs */}
+      <div aria-hidden="true" className="absolute right-0 top-1/3 w-96 h-96 bg-primary-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div aria-hidden="true" className="absolute left-0 bottom-0 w-64 h-64 bg-secondary-600/5 rounded-full blur-3xl pointer-events-none" />
     </section>
   );
 }

@@ -1,58 +1,147 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #050505;
-  --color-foreground: #ededed;
-  
-  /* Primary accents */
+  --color-background: #080808;
+  --color-foreground: #f0f0f0;
+
+  /* Primary — desaturated cyan-blue */
+  --color-primary-300: #7dd3fc;
   --color-primary-400: #38bdf8;
   --color-primary-500: #0ea5e9;
   --color-primary-600: #0284c7;
+  --color-primary-900: #0c2a3a;
 
-  /* Secondary/Cyan accents */
-  --color-secondary-400: #22d3ee;
-  --color-secondary-500: #06b6d4;
-  --color-secondary-600: #0891b2;
+  /* Secondary — teal */
+  --color-secondary-400: #2dd4bf;
+  --color-secondary-500: #14b8a6;
+  --color-secondary-600: #0d9488;
 
-  --font-sans: var(--font-inter);
-}
+  /* Neutral grays — cool-tinted */
+  --color-surface: #0f1117;
+  --color-surface-2: #161b24;
 
-@layer base {
-  :root {
-    --background: #ffffff;
-    --foreground: #171717;
-  }
-  
-  .dark {
-    --background: #050505;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-jetbrains);
 }
 
 @layer base {
   * {
-    @apply border-gray-800;
+    box-sizing: border-box;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary-500/30 selection:text-primary-400;
+    @apply bg-background text-foreground antialiased;
+    @apply selection:bg-primary-500/30 selection:text-primary-300;
+    overflow-x: hidden;
   }
 }
 
-@layer utilities {
-  .glass {
-    @apply bg-gray-900/40 backdrop-blur-md border border-white/10 shadow-xl;
-  }
-  
-  .glass-card {
-    @apply bg-gray-900/30 backdrop-blur-lg border border-white/5 shadow-2xl rounded-2xl hover:border-white/20 transition-all duration-300;
-  }
-
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary-400 to-primary-500;
-  }
+/* ─── Grain overlay ─────────────────────────────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
 }
 
-/* Smooth scrolling */
+/* ─── Typography ─────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+  line-height: 1.75;
+  max-width: 65ch;
+}
+
+/* ─── Smooth scroll ──────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
+}
+
+/* ─── Utilities ──────────────────────────────────────────── */
+@layer utilities {
+  /* Double-bezel glass card */
+  .glass-card {
+    background: rgba(15, 17, 23, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 1.5rem;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04) inset,
+      0 1px 1px rgba(255,255,255,0.06) inset,
+      0 32px 64px -16px rgba(0,0,0,0.6);
+    transition: border-color 500ms cubic-bezier(0.32,0.72,0,1),
+                box-shadow 500ms cubic-bezier(0.32,0.72,0,1);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(14, 165, 233, 0.25);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06) inset,
+      0 1px 1px rgba(255,255,255,0.08) inset,
+      0 0 40px -8px rgba(14,165,233,0.12),
+      0 32px 64px -16px rgba(0,0,0,0.7);
+  }
+
+  /* Pill nav glass */
+  .glass-nav {
+    background: rgba(8, 8, 8, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 50%, #818cf8 100%);
+  }
+
+  /* Eyebrow label */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] uppercase tracking-[0.2em] font-semibold;
+    background: rgba(14,165,233,0.08);
+    border: 1px solid rgba(14,165,233,0.2);
+    color: #38bdf8;
+  }
+
+  /* Spotlight card — cursor glow */
+  .spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(14,165,233,0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 400ms;
+    pointer-events: none;
+  }
+
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-28 md:py-36;
+  }
+
+  /* Monospace accent */
+  .font-mono-accent {
+    font-family: var(--font-jetbrains), 'Courier New', monospace;
+    font-size: 0.8em;
+    letter-spacing: 0.05em;
+  }
 }

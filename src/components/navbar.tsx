@@ -2,102 +2,139 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Mail } from "lucide-react";
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#experience" },
-  { name: "Blog", href: "#blog" },
-  { name: "Contact", href: "#contact" },
+  { href: "#home", label: "Home" },
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Skills" },
+  { href: "#projects", label: "Projects" },
+  { href: "#experience", label: "Experience" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-black/50 backdrop-blur-md border-b border-white/10 shadow-lg py-3" : "bg-transparent py-5"
-      }`}
-    >
-      <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold tracking-tighter hover:text-primary-400 transition-colors">
-          Shihab<span className="text-primary-500">.</span>
-        </Link>
+    <>
+      {/* Floating pill nav */}
+      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-5 px-4">
+        <motion.nav
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+          className={`glass-nav rounded-full flex items-center justify-between px-5 py-2.5 w-full max-w-3xl transition-all duration-500 ${
+            scrolled ? "shadow-[0_0_40px_rgba(14,165,233,0.08)]" : ""
+          }`}
+        >
+          {/* Logo */}
+          <Link
+            href="#home"
+            className="text-lg font-bold tracking-tight shrink-0"
+            onClick={() => setIsOpen(false)}
+          >
+            Shihab<span className="text-primary-400">.</span>
+          </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
-          <ul className="flex gap-6 text-sm font-medium text-gray-300">
+          {/* Desktop links */}
+          <ul className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <li key={link.name}>
-                <Link href={link.href} className="hover:text-primary-400 transition-colors">
-                  {link.name}
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="px-3 py-1.5 rounded-full text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-300"
+                >
+                  {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-        </nav>
 
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-gray-300 hover:text-white"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+          {/* Desktop socials */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link href="https://github.com/Mr-Borolox-sudo" target="_blank" aria-label="GitHub"
+              className="text-gray-500 hover:text-white transition-colors duration-300">
+              <FaGithub size={17} />
+            </Link>
+            <Link href="https://www.linkedin.com/in/shihab-ahammed/" target="_blank" aria-label="LinkedIn"
+              className="text-gray-500 hover:text-[#0a66c2] transition-colors duration-300">
+              <FaLinkedin size={17} />
+            </Link>
+            <Link href="https://www.instagram.com/_laz_yyyy__/" target="_blank" aria-label="Instagram"
+              className="text-gray-500 hover:text-[#E1306C] transition-colors duration-300">
+              <FaInstagram size={17} />
+            </Link>
+          </div>
 
-      {/* Mobile Nav */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-white/10 shadow-2xl py-6 px-6 md:hidden flex flex-col gap-6"
+          {/* Hamburger */}
+          <button
+            className="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+            onClick={() => setIsOpen((v) => !v)}
+            aria-label="Toggle menu"
           >
-            <ul className="flex flex-col gap-4 text-base font-medium text-gray-300">
-              {navLinks.map((link) => (
-                <li key={link.name}>
+            <span className={`block h-px w-5 bg-white origin-center transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? "rotate-45 translate-y-[3px]" : ""}`} />
+            <span className={`block h-px w-5 bg-white origin-center transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? "-rotate-45 -translate-y-[3px]" : ""}`} />
+          </button>
+        </motion.nav>
+      </header>
+
+      {/* Mobile fullscreen overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center"
+            style={{ background: "rgba(8,8,8,0.92)", backdropFilter: "blur(24px)" }}
+          >
+            <ul className="flex flex-col items-center gap-2 mb-12">
+              {navLinks.map((link, i) => (
+                <motion.li
+                  key={link.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.3, delay: i * 0.05, ease: [0.32, 0.72, 0, 1] }}
+                >
                   <Link
                     href={link.href}
-                    className="block hover:text-primary-400 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => setIsOpen(false)}
+                    className="text-3xl font-semibold text-gray-300 hover:text-white transition-colors tracking-tight"
                   >
-                    {link.name}
+                    {link.label}
                   </Link>
-                </li>
+                </motion.li>
               ))}
             </ul>
-            <div className="flex gap-4 pt-4 border-t border-white/10">
-              <Link href="https://github.com/shihab-ahammed" target="_blank" className="text-gray-400 hover:text-white transition-colors">
-                <FaGithub size={20} />
-              </Link>
-              <Link href="https://www.linkedin.com/in/shihab-ahammed/" target="_blank" className="text-gray-400 hover:text-[#0a66c2] transition-colors">
-                <FaLinkedin size={20} />
-              </Link>
-              <Link href="https://www.instagram.com/_laz_yyyy__/" target="_blank" className="text-gray-400 hover:text-[#E1306C] transition-colors">
-                <FaInstagram size={20} />
-              </Link>
-            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="flex gap-6"
+            >
+              <Link href="https://github.com/Mr-Borolox-sudo" target="_blank"
+                className="text-gray-500 hover:text-white transition-colors"><FaGithub size={22} /></Link>
+              <Link href="https://www.linkedin.com/in/shihab-ahammed/" target="_blank"
+                className="text-gray-500 hover:text-[#0a66c2] transition-colors"><FaLinkedin size={22} /></Link>
+              <Link href="https://www.instagram.com/_laz_yyyy__/" target="_blank"
+                className="text-gray-500 hover:text-[#E1306C] transition-colors"><FaInstagram size={22} /></Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
