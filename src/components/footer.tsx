@@ -37,8 +37,8 @@ export default function Footer() {
       
       <div className="container mx-auto px-6 md:px-12 mt-8 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-sm text-gray-500">
         <p>© {year} Shihab Ahammed. All rights reserved.</p>
-        <p className="flex items-center gap-1 mt-2 md:mt-0">
-          Built with <Heart size={14} className="text-red-500" /> and Next.js
+        <p className="mt-2 md:mt-0 italic">
+          Root access to knowledge, one shell at a time.
         </p>
       </div>
     </footer>
