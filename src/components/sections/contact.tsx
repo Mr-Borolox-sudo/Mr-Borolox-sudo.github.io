@@ -1,11 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, MessageSquare, Send, MapPin } from "lucide-react";
+import { Mail, MessageSquare, Send, MapPin, CheckCircle, XCircle } from "lucide-react";
 import { FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
 import SectionHeading from "@/components/section-heading";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
+
+const SERVICE_ID = "service_0xnp96m";
+const TEMPLATE_ID = "template_lptzgnl";
+const PUBLIC_KEY = "mRuHUWvh_Ab5A6qKP";
 
 const contactInfo = [
   {
@@ -40,18 +45,30 @@ const contactInfo = [
   },
 ];
 
-export default function Contact() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+type Status = "idle" | "sending" | "success" | "error";
 
-  const handleSubmit = (e: React.FormEvent) => {
+export default function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<Status>("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000);
-    }, 1500);
+    if (!formRef.current) return;
+
+    setStatus("sending");
+
+    try {
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, {
+        publicKey: PUBLIC_KEY,
+      });
+      setStatus("success");
+      formRef.current.reset();
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 4000);
+    }
   };
 
   return (
@@ -104,23 +121,29 @@ export default function Contact() {
             className="lg:col-span-3"
           >
             <div className="glass-card p-8 md:p-10">
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium text-gray-300 ml-1">Name</label>
+                    <label htmlFor="from_name" className="text-sm font-medium text-gray-300 ml-1">
+                      Name
+                    </label>
                     <input
                       type="text"
-                      id="name"
+                      id="from_name"
+                      name="from_name"
                       required
                       placeholder="John Doe"
                       className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all placeholder:text-gray-600"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-300 ml-1">Email</label>
+                    <label htmlFor="from_email" className="text-sm font-medium text-gray-300 ml-1">
+                      Email
+                    </label>
                     <input
                       type="email"
-                      id="email"
+                      id="from_email"
+                      name="from_email"
                       required
                       placeholder="john@example.com"
                       className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all placeholder:text-gray-600"
@@ -129,9 +152,12 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium text-gray-300 ml-1">Message</label>
+                  <label htmlFor="message" className="text-sm font-medium text-gray-300 ml-1">
+                    Message
+                  </label>
                   <textarea
                     id="message"
+                    name="message"
                     required
                     rows={5}
                     placeholder="Hello, I'd like to talk about..."
@@ -139,17 +165,46 @@ export default function Contact() {
                   ></textarea>
                 </div>
 
+                {/* Status messages */}
+                {status === "success" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-green-400 bg-green-400/10 border border-green-400/20 rounded-lg px-4 py-3 text-sm"
+                  >
+                    <CheckCircle size={16} />
+                    Message sent! I'll get back to you soon.
+                  </motion.div>
+                )}
+                {status === "error" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3 text-sm"
+                  >
+                    <XCircle size={16} />
+                    Something went wrong. Please try emailing me directly.
+                  </motion.div>
+                )}
+
                 <button
                   type="submit"
-                  disabled={isSubmitting || submitted}
+                  disabled={status === "sending"}
                   className="w-full py-4 rounded-lg bg-primary-600 hover:bg-primary-500 text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(14,165,233,0.3)]"
                 >
-                  {isSubmitting ? (
-                    <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                  ) : submitted ? (
-                    <>Message Sent! <MessageSquare size={18} /></>
+                  {status === "sending" ? (
+                    <>
+                      <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Sending...
+                    </>
+                  ) : status === "success" ? (
+                    <>
+                      <MessageSquare size={18} /> Message Sent!
+                    </>
                   ) : (
-                    <>Send Message <Send size={18} /></>
+                    <>
+                      Send Message <Send size={18} />
+                    </>
                   )}
                 </button>
               </form>
